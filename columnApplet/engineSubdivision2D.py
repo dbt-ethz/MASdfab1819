@@ -6,6 +6,13 @@ import mola.vec as vec
 import math
 import gui
 
+"""
+    initialise() is called once at the beginning
+    guiEvents() is called in each frame
+    global doUpdate indicates that the main applet should update the PSHAPE
+    global column should store the mesh which represents the column geometry
+"""
+
 def initialize():
     global sinusGuiVertical,bUpdate
     global doUpdate

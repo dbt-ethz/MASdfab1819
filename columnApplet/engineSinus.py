@@ -6,7 +6,14 @@ import mola.vec as vec
 import math
 import gui
 
+"""
+    initialise() is called once at the beginning
+    guiEvents() is called in each frame
+    global doUpdate indicates that the main applet should update the PSHAPE
+    global column should store the mesh which represents the column geometry
+"""
 def initialize():
+    '''Is called once at the beginning. It should be used to build up the GUI'''
     global sinusGuiVertical,sinusGuiProfile,bUpdate
     global doUpdate
     doUpdate=False
@@ -25,6 +32,8 @@ def initialize():
     createMesh()
 
 def guiEvents():
+    '''Is called in each frame. It should be used to catch events and to decide if an update is needed'''
+
     global doUpdate
     global freq_Z,amp_Z,phase_Z,freq_P,amp_P,phase_P
     freq_Z=sinusGuiVertical.getFrequency()
@@ -34,10 +43,10 @@ def guiEvents():
     amp_P=sinusGuiProfile.getAmplitude()
     phase_P=sinusGuiProfile.getPhase()
     if bUpdate.getValue():
-        doUpdate=True 
+        doUpdate=True
         createMesh()
-        bUpdate.setValue(False)   
-    
+        bUpdate.setValue(False)
+
 def createProfile(z):
     global freq_Z,amp_Z,phase_Z,freq_P,amp_P,phase_P
     vertices=polyUtils.constructCircle(15,128,z)

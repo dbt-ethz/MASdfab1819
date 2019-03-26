@@ -7,6 +7,12 @@ import mola.renderP5 as renderer
 import math
 import gui
 
+"""
+    initialise() is called once at the beginning
+    guiEvents() is called in each frame
+    global doUpdate indicates that the main applet should update the PSHAPE
+    global column should store the mesh which represents the column geometry
+"""
 def initialize():
     global bShape,bSubdiv,bReset,bSmooth
     global initialColumn, column
@@ -20,7 +26,7 @@ def initialize():
     initialColumn = io.importOBJ(sketchPath()+'/data/column_in.obj')
     column = initialColumn
     assign_pedestal_capital(column)
-    
+
 def guiEvents():
     global doUpdate,column,initialColumn
     doUpdate=False
@@ -41,7 +47,7 @@ def guiEvents():
         column = subdivision.subdivideCatmull(column)
         bSmooth.setValue(False)
         doUpdate=True
-    
+
 def assign_pedestal_capital(_mesh):
     for f in _mesh.faces:
         if faceUtils.center(f).z < 100:
