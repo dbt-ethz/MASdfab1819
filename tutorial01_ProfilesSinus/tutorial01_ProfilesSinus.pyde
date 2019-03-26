@@ -6,7 +6,7 @@ def setup():
     p=0
     phaseMove=False
     size(640,480,P3D)
-    
+
 def constructCircle(radius,nSegs=16,z=0):
     vertices=[]
     deltaAngle=PI*2.0/nSegs
@@ -19,8 +19,8 @@ def constructCircle(radius,nSegs=16,z=0):
 
 def mousePressed():
     global phaseMove
-    phaseMove=not phaseMove    
-    
+    phaseMove=not phaseMove
+
 def draw():
     global p,phaseMove
     if phaseMove:
