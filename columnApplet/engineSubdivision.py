@@ -31,7 +31,7 @@ def guiEvents():
     global doUpdate,column,initialColumn
     doUpdate=False
     if bSubdiv.getValue():
-        column = column_subdivide(column, 1.0)
+        column = column_subdivide(column)
         bSubdiv.setValue(False)
         doUpdate=True
     if bShape.getValue():
@@ -56,7 +56,7 @@ def assign_pedestal_capital(_mesh):
             f.group = 'pedestal'
         else: f.group = 'shaft'
 
-def column_subdivide(mesh_, c_var=1):
+def column_subdivide(mesh_):
     newFaces = []
     for f in mesh_.faces:
         #shaft_______
