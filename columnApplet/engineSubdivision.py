@@ -50,43 +50,17 @@ def guiEvents():
 
 def assign_pedestal_capital(_mesh):
     for f in _mesh.faces:
-        if faceUtils.center(f).z < 100:
+        if faceUtils.center(f).z < 80:
             f.group = 'pedestal'
-        elif faceUtils.center(f).z > 200:
-            f.group = 'capital'
+        elif faceUtils.center(f).z > 300:
+            f.group = 'pedestal'
         else: f.group = 'shaft'
 
 def column_subdivide(mesh_, c_var=1):
     newFaces = []
     for f in mesh_.faces:
-        #pedestal_______
-        if f.group=='pedestal':
-            fsc=sd_sided_tapered(f,.2)
-            for f_ in fsc:
-                f_.group = 'p_level_2'
-            fsc[0].group='p_level_3'
-            fsc[-1].group='p_level_3'
-            newFaces.extend(fsc)
-        elif f.group=='p_level_3':
-            fsc=sd_sided_tapered(f,.2)
-            for f_ in fsc:
-                f_.group = 'p_level_4'
-            fsc[0].group='stop'
-            fsc[-1].group='stop'
-            newFaces.extend(fsc)
-        elif f.group=='p_level_4':
-            fsc=subdivision.extrude(f,5)
-            for f_ in fsc:
-                f_.group = 'p_level_5'
-            newFaces.extend(fsc)
-        elif f.group=='p_level_2':
-            fsc=subdivision.extrude(f,-15)
-            for f_ in fsc:
-                f_.group = 'stop'
-            fsc[-1].group='p_level_3'
-            newFaces.extend(fsc)
         #shaft_______
-        elif f.group=='shaft':
+        if f.group=='shaft':
             fsc=sd_sided_tapered(f,.2)
             for f_ in fsc:
                 f_.group = 's_level_2'
@@ -94,7 +68,7 @@ def column_subdivide(mesh_, c_var=1):
             fsc[-1].group='s_level_3'
             newFaces.extend(fsc)
         elif f.group=='s_level_3':
-            fsc=sd_sided_tapered(f,.2)
+            fsc=sd_sided_tapered(f,.1)
             for f_ in fsc:
                 f_.group = 's_level_4'
             fsc[0].group='stop'
@@ -103,20 +77,60 @@ def column_subdivide(mesh_, c_var=1):
         elif f.group=='s_level_4':
             fsc=subdivision.extrude(f,5)
             for f_ in fsc:
-                f_.group = 's_level_6'
-            newFaces.extend(fsc)
+                if abs(faceUtils.vertical_angle(f_))<PI/2-0.1:
+                    f_.group = 's_level_5'
+                    newFaces.append(f_)
+            
         elif f.group=='s_level_2':
-            fsc=subdivision.extrude(f,-15)
+            fsc=subdivision.extrude(f,-9)
             for f_ in fsc:
-                f_.group = 's_level_5'
-            #fsc[-1].group='s_level_3'
-            newFaces.extend(fsc)
-        elif f.group=='s_level_6':
-            fsc=subdivision.extrudeTapered(f,4.5,.4)
+                if abs(faceUtils.vertical_angle(f_))<PI/2-0.1:
+                    f_.group = 'stop'
+                    newFaces.append(f_)
+                
+        
+        
+        #pedestal_______
+        elif f.group=='pedestal':
+            fsc=sd_sided_tapered(f,.2)
             for f_ in fsc:
-                f_.group = 's_level_5'
-            fsc[-1].group='s_level_6'
+                f_.group = 'p_level_2'
+            fsc[0].group='p_level_3'
+            fsc[-1].group='p_level_3'
             newFaces.extend(fsc)
+        elif f.group=='p_level_3':
+            fsc=sd_sided_tapered(f,.1)
+            for f_ in fsc:
+                f_.group = 'p_level_4'
+            fsc[0].group='stop'
+            fsc[-1].group='stop'
+            newFaces.extend(fsc)
+        elif f.group=='p_level_4':
+            fsc=subdivision.extrude(f,5)
+            for f_ in fsc:
+                if abs(faceUtils.vertical_angle(f_))<PI/2-0.1:
+                    if fsc.index(f_)==1:f_.group='stop'
+                    
+                    else: f_.group = 'p_level_5'
+                    newFaces.append(f_)
+            
+        elif f.group=='p_level_5':
+            fsc=subdivision.extrudeTapered(f,8,0.5)
+            for f_ in fsc:
+                f_.group = 'stop'
+            newFaces.extend(fsc)
+            
+        
+        
+        elif f.group=='p_level_2':
+            fsc=subdivision.extrude(f,-9)
+            for f_ in fsc:
+                if abs(faceUtils.vertical_angle(f_))<PI/2-0.1:
+                    f_.group = 'stop'
+                    newFaces.append(f_)
+                else: print faceUtils.vertical_angle(f_),'///'
+
+
         #capital______
         elif f.group=='capital':
             fsc=sd_sided_tapered(f,.2)
@@ -125,31 +139,20 @@ def column_subdivide(mesh_, c_var=1):
             fsc[0].group='c_level_3'
             fsc[-1].group='c_level_3'
             newFaces.extend(fsc)
-        elif f.group=='c_level_3':
-            fsc=sd_sided_tapered(f,.2)
-            for f_ in fsc:
-                f_.group = 'c_level_4'
-            fsc[0].group='c_level_3'
-            fsc[-1].group='c_level_3'
-            newFaces.extend(fsc)
-        elif f.group=='c_level_4':
-            fsc=subdivision.extrude(f,10)
-            for f_ in fsc:
-                f_.group = 'c_level_5'
-            newFaces.extend(fsc)
+        
         else:
             newFaces.append(f)
     m=Mesh()
     m.faces=newFaces
     for f in m.faces:
-        if faceUtils.area(f)<25:
+        if faceUtils.area(f)<5:
             f.group = 'stop'
     return m
 
 def column_pedestal_capital(_mesh):
         newFaces = []
         for f in _mesh.faces:
-            fsc=f_ped_cap_expand(f,60,80)
+            fsc=f_ped_cap_expand(f,80,300)
             for f_ in fsc:
                 f_.group = f.group
             newFaces.extend(fsc)
@@ -196,14 +199,15 @@ def f_ped_cap_expand(_face, pedestal_h, capital_h):
     new_faces=[]
     vts = []
     var1=1.1
-    var2=0.9
+    var2=1.05
+    var3=0.95
     for vt in _face.vertices:
         if vt.z<pedestal_h:
             vt = Vertex(vt.x*var1,vt.y*var1,vt.z)
-        elif vt.z>280:
-            vt = Vertex(vt.x,vt.y,vt.z)
         elif vt.z>capital_h:
             vt = Vertex(vt.x*var2,vt.y*var2,vt.z)
+        elif vt.z> capital_h/3:
+            vt = Vertex(vt.x*var3,vt.y*var3,vt.z)
         vts.append(vt)
     new_faces.append(Face(vts))
     return new_faces
