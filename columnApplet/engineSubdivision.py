@@ -54,7 +54,7 @@ def assign_pedestal_capital(_mesh):
         if faceUtils.center(f).z<80: 
             f.group='pedestal'
         elif faceUtils.center(f).z> 290:
-            f.group='capital'
+            f.group='pedestal'
         else: f.group = 'shaft'
     
 def column_subdivide(_mesh):
@@ -102,7 +102,7 @@ def column_subdivide(_mesh):
             fcs=sd_sided_tapered (f,0.1)
             for _f in fcs:
                 _f.group='stop'
-            fcs[1].group='s_level_4'
+            fcs[1].group='p_level_4'
             newFaces.extend(fcs)
             
         elif f.group=='p_level_3':
@@ -111,7 +111,23 @@ def column_subdivide(_mesh):
                 if abs ( faceUtils.vertical_angle(_f)) < PI/2-0.1:
                     _f.group = 'stop'
                     newFaces.append(_f)
-            
+        
+        elif f.group == 'p_level_4':
+            fcs=subdivision.extrude(f,5)
+            for _f in fcs:
+                if abs(faceUtils.vertical_angle(_f))< PI/2-0.1:
+                    if fcs.index(_f)==1: _f.group ='stop'
+                    else: 
+                        _f.group = 'p_level_5'
+                        newFaces.append(_f)
+                        
+        elif f.group == 'p_level_5':
+            fcs = subdivision.extrudeTapered(f,10,0.5)
+            for _f in fcs:
+                _f.group='stop'
+            newFaces.extend(fcs)
+        # capital______
+        
         else:
             newFaces.append(f)
             
