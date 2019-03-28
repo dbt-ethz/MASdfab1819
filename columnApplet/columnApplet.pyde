@@ -83,21 +83,19 @@ def update():
 def display2D():
     global screen
     gui.cam.beginHUD()
-    fill(40)
-    #rect(0,0,guiDimX,height)
-    #rect(width-guiDimX,0,guiDimX,height)
     gui.cp5.draw()
+    image(gui.logo1, width-100, height-100)
+    #image(gui.logo2, width-170, height-100)
     pushMatrix()
-    translate(guiDimX/2-5,height-guiDimX/2-100)
-    scale(3)
-    stroke(255)
-    strokeWeight(0.25)
-    noFill()
+    translate(guiDimX/2-20,height-guiDimX/2-100)
+    scale(2.5)
+    fill(70, 100)
     rect(-60,-60,120,120)
-    stroke(0,255,0)
+    fill(0)
     ellipse(0,0,12.5,12.5)
     if pshapeSlice!=None:
-        strokeWeight(1)
+        strokeWeight(2)
+        stroke(255, 0, 155)
         shape(pshapeSlice)
     popMatrix()
     gui.cam.endHUD()
@@ -106,7 +104,7 @@ def display3D():
     global sliceZ,pshapeSlice, rotZ
     if sliceZ!=gui.sliderSlice.getValue():
         sliceZ=gui.sliderSlice.getValue()
-        stroke(255,0,0)
+        stroke(255,0,155)
         pshapeSlice=renderer.createLinesShape(slicer.slice(engine.column,sliceZ))
 
     selectedIndex = gui.listDisplay.getValue()

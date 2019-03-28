@@ -12,20 +12,22 @@ def initialize():
     dancer.translate(50,150,-50)
     dancer.disableStyle()
     createVignette()
+    loadLogos()
     
     cY=100
     bDisplaySlice = createToggle("Slice", 20, cY, 45, 45)
     bBase = createToggle("Base", 70, cY, 45, 45)
     bDance = createToggle("Dancer", 120, cY, 45, 45)
     bRot = createToggle("Rotate", 170, cY, 45, 45)
-    bExport = createButton("Export", 340, cY, 45, 45)
+    bExport = createButton("Export", 300, cY, 45, 45)
 
-    sliderSlice = createSlider("Slice Z", 20, height-100, 0, 300).setSize(340,15)
+    sliderSlice = createSlider("Slice Z", 20, height-120, 0, 300).setSize(340,15)
 
     listDisplay = cp5.addScrollableList("display")
-    listDisplay.setPosition(20, 50)
+    listDisplay.setPosition(20, 170)
+    listDisplay.setColorValue(10).setColorActive(color(255)).setColorForeground(color(255, 0, 155)).setColorBackground(color(70, 200))
     listDisplay.setWidth(190)
-    listDisplay.setHeight(500)
+    listDisplay.setBarHeight(25)
     listDisplay.setItems(["White","Group","Curvature","Area","Perimeter","Compactness","Vertical Angle","Horizontal Angle"])
     listDisplay.setOpen(True)
     listDisplay.setValue(0)
@@ -89,6 +91,7 @@ def createVignette():
     backgroundImage.mask(msk)
     return backgroundImage
 
-def loadLogo():
-    global logo
-    logo = loadImage("dbt_logo.png")
+def loadLogos():
+    global logo1, logo2
+    logo1 = loadImage("dfab_logo.png")
+    logo2 = loadImage("origen_logo.png")
