@@ -2,7 +2,7 @@ add_library('peasycam')
 add_library('controlP5')
 
 import math, datetime
-import engineSubdivision2D as engine
+import engineSineSubdiv as engine
 import gui as gui
 import mola.io as io
 import mola.slicer as slicer
