@@ -137,15 +137,19 @@ def column_subdivide(_mesh):
     return m
                 
         
-                
-        
-        
-    
-    
-    
 
 def column_pedestal_capital(_mesh):
-    pass
+    new_faces = []
+    
+    for f in _mesh.faces:
+        fcs=f_ped_cap_expand(f,80,280)
+        for _f in fcs:
+            _f.group = f.group
+        new_faces.extend(fcs)
+    m=Mesh()
+    m.faces=new_faces
+    
+    return m
 
 def sd_sided_tapered(_face,d=0.1):
     # d should be between 0.01 and 0.49
@@ -182,3 +186,23 @@ def sd_sided_tapered(_face,d=0.1):
 
 def f_ped_cap_expand(_face, pedestal_h, capital_h):
     
+    var1=1.1
+    var2=1.05
+    var3=0.9
+    new_face=[]
+    new_vertices=[]
+    for _v in _face.vertices:
+        
+        if _v.z< pedestal_h:
+            _v = Vertex (_v.x*var1,_v.y*var1, _v.z)
+        elif _v.z>capital_h:
+            _v = Vertex (_v.x*var2,_v.y*var2, _v.z)
+        else:
+            _v = Vertex (_v.x*var3,_v.y*var3, _v.z)
+        new_vertices.append(_v)
+    
+    new_face.append(Face(new_vertices))
+    return new_face
+        
+        
+        
